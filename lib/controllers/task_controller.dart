@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/task_model.dart';
-import '../services/notification_service.dart';
 
 class TaskController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -59,7 +58,9 @@ class TaskController extends GetxController {
     if (sortBy == 'Due Date') {
       taskList.sort((a, b) => a.dueDate.compareTo(b.dueDate));
     } else if (sortBy == 'Priority') {
-      taskList.sort((a, b) => a.priority.compareTo(b.priority));
+      final priorityOrder = {'High': 0, 'Medium': 1, 'Low': 2};
+      taskList.sort(
+          (a, b) => priorityOrder[a.priority]! - priorityOrder[b.priority]!);
     }
     taskList.refresh();
   }
